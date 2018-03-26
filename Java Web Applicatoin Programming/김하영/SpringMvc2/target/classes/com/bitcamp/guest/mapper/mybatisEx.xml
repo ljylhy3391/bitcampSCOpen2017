@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd"> 
+<mapper namespace="com.bitcamp.guest.dao.memberDao2">
+
+<select id="insertdao" parameterType="com.bitcamp.mvc.model.member">
+	insert into member(member_id,member_name,password,photo)
+	values(#{member_id},#{member_name},#{password},#{photo})
+
+	<!-- resultCnt = jdbcTemplate.update(sql, member.getMember_id(), member.getMember_name(), 
+		member.getPassword(), member.getPhoto()); -->
+</select>
+<!-- 
+<select id="selectBy">
+
+
+select * from member where member_id=#{member_id}
+String sql = "select * from member where member_id=?";
+
+
+
+</select>
+
+
+
+<select id="selectMemberBy"></select>
+
+
+<select id="updateMember"></select>
+
+
+<select id="deleteMember"></select>
+ -->
+</mapper>
