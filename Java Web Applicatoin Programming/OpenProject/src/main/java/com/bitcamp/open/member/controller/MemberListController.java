@@ -12,27 +12,17 @@ import com.bitcamp.open.member.service.MemberListService;
 
 @Controller
 public class MemberListController {
-	
-	@Autowired
-	private MemberListService service;
 
-	@RequestMapping("/member/memberList")
-	public String memberList(Model model) {
-		
-		List<Member> members = service.getMemberList();	
-		
-		model.addAttribute("members", members);	
-		
-		return "member/memberList";
+	@Autowired
+	private MemberListService memberListService;
+
+	@RequestMapping("/member/list")
+	public String list(Model model) {
+		List<Member> memberlist = memberListService.listview();
+		model.addAttribute("memberlist", memberlist);
+		/*
+		 * if (members == null) { return "member/listFail"; }
+		 */
+		return "member/list";
 	}
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
 }

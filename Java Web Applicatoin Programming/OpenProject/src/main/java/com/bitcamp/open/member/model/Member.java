@@ -5,29 +5,28 @@ import java.util.Date;
 import org.springframework.web.multipart.MultipartFile;
 
 public class Member {
-	
-	private int idx;
-	private String member_id;
+	int idx;
 	private String member_name;
-	private String password;
-	private Date regdate;
+	private String member_id;
+	private String member_pw;
+	private Date member_date;
 	private MultipartFile photofile;
-	private String photo;
-	
-	public Member(){}
+	private String member_photo;
 
-	public Member(int idx, String member_id, String member_name, String password, Date regdate, MultipartFile photofile,
-			String photo) {
-		this.idx = idx;
-		this.member_id = member_id;
-		this.member_name = member_name;
-		this.password = password;
-		this.regdate = regdate;
-		this.photofile = photofile;
-		this.photo = photo;
+	public Member() {
 	}
 
-
+	public Member(int idx, String member_name, String member_id, String member_pw, Date member_date,
+			MultipartFile photofile, String member_photo) {
+		super();
+		this.idx = idx;
+		this.member_name = member_name;
+		this.member_id = member_id;
+		this.member_pw = member_pw;
+		this.member_date = member_date;
+		this.photofile = photofile;
+		this.member_photo = member_photo;
+	}
 
 	public int getIdx() {
 		return idx;
@@ -35,14 +34,6 @@ public class Member {
 
 	public void setIdx(int idx) {
 		this.idx = idx;
-	}
-
-	public String getMember_id() {
-		return member_id;
-	}
-
-	public void setMember_id(String member_id) {
-		this.member_id = member_id;
 	}
 
 	public String getMember_name() {
@@ -53,32 +44,28 @@ public class Member {
 		this.member_name = member_name;
 	}
 
-	public String getPassword() {
-		return password;
+	public String getMember_id() {
+		return member_id;
 	}
 
-	public void setPassword(String password) {
-		this.password = password;
+	public void setMember_id(String member_id) {
+		this.member_id = member_id;
 	}
 
-	public Date getRegdate() {
-		return regdate;
+	public String getMember_pw() {
+		return member_pw;
 	}
 
-	public void setRegdate(Date regdate) {
-		this.regdate = regdate;
+	public void setMember_pw(String member_pw) {
+		this.member_pw = member_pw;
 	}
 
-	public String getPhoto() {
-		return photo;
+	public Date getMember_date() {
+		return member_date;
 	}
 
-	public void setPhoto(String photo) {
-		this.photo = photo;
-	}
-	
-	public boolean matchPassword(String pw){
-		return password.equals(pw);
+	public void setMember_date(Date member_date) {
+		this.member_date = member_date;
 	}
 
 	public MultipartFile getPhotofile() {
@@ -89,26 +76,24 @@ public class Member {
 		this.photofile = photofile;
 	}
 
+	public String getMember_photo() {
+		return member_photo;
+	}
+
+	public void setMember_photo(String member_photo) {
+		this.member_photo = member_photo;
+	}
+
+	public boolean matchPassword(String pw) {
+		return member_pw.equals(pw);
+
+	}
+
 	@Override
 	public String toString() {
-		return "Member [idx=" + idx + ", member_id=" + member_id + ", member_name=" + member_name + ", password="
-				+ password + ", regdate=" + regdate + ", photo=" + photo + "]";
+		return "Member [idx=" + idx + ", member_name=" + member_name + ", member_id=" + member_id + ", member_pw="
+				+ member_pw + ", member_date=" + member_date + ", photofile=" + photofile + ", member_photo="
+				+ member_photo + "]";
 	}
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
 
 }

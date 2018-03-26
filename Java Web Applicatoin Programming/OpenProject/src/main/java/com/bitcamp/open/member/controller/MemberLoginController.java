@@ -11,16 +11,17 @@ import org.springframework.web.bind.annotation.RequestParam;
 import com.bitcamp.open.member.model.Member;
 import com.bitcamp.open.member.service.MemberLoginService;
 import com.bitcamp.open.member.service.SimpleRegistrationNotifier;
+import com.bitcamp.open.member.service.SimpleRegistrationNotifier2;
 
 @Controller
-@RequestMapping("member/login")
+@RequestMapping("/member/login")
 public class MemberLoginController {
 
 	@Autowired
+	private MemberLoginService memberLoginService;
+	@Autowired
 	private SimpleRegistrationNotifier notifier;
 
-	@Autowired
-	private MemberLoginService memberLoginService;
 
 	@RequestMapping(method = RequestMethod.GET)
 	public String loginForm() {
@@ -29,31 +30,26 @@ public class MemberLoginController {
 
 	@RequestMapping(method = RequestMethod.POST)
 	public String login(@RequestParam(value = "member_id", defaultValue = "0") String id,
-			@RequestParam(value = "password", required = false) String pw, HttpSession session) {
-
+			@RequestParam(value = "member_pw", required = false) String pw, HttpSession session) {
 		System.out.println(id);
 		System.out.println(pw);
 
-		// 정상적으로 로그인 처리가 되면 리다이렉트 처리 : mypage로 이동
-		String view = "redirect:mypage"; // /member/mypage
+		// 정상적으로 로그인 처리가 되면 리다이렉트 처리 : mypage로 이동.
+		String view = "redirect:mypage";// /member/mypage
 
 		Member member = memberLoginService.loginChk(id, pw);
 		// null / Member 객체
-
 		if (member == null) {
 			return "member/loginFail";
 		}
 
-		member.setPassword("");
-
 		// 세션에 데이터 저장
 		session.setAttribute("loginInfo", member);
-
 		System.out.println(session.getAttribute("loginInfo"));
-		
-		notifier.sendMail(member.getMember_id(), "로그인이 성공적으로 처리되었습니다.");
 
+		notifier.sendMail(member.getMember_id(), "로그인이 성공적으로 처리되었습니다.");
 		return view;
+
 	}
 
 }
