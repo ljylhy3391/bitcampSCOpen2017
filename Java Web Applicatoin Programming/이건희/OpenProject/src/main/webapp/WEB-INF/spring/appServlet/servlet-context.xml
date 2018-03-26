@@ -1,0 +1,167 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans:beans xmlns:mvc="http://www.springframework.org/schema/mvc"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:beans="http://www.springframework.org/schema/beans"
+	xmlns:context="http://www.springframework.org/schema/context" xmlns:tx="http://www.springframework.org/schema/tx"
+	xsi:schemaLocation="http://www.springframework.org/schema/mvc http://www.springframework.org/schema/mvc/spring-mvc-4.3.xsd
+		http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+		http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd
+		http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx-4.3.xsd">
+
+	<!-- DispatcherServlet Context: defines this servlet's request-processing 
+		infrastructure -->
+
+	<!-- Enables the Spring MVC @Controller programming model -->
+	<mvc:annotation-driven />
+
+	<!-- Handles HTTP GET requests for /resources/** by efficiently serving 
+		up static resources in the ${webappRoot}/resources directory -->
+
+	<mvc:resources mapping="/resources/**" location="/resources/" />
+
+	<!-- 업로드된 파일(사진) 들을 원래 가지는 성격의 파일로 정용하기 위한 설정 -->
+	<mvc:resources mapping="/uploadfile/**" location="/uploadfile/" />
+
+	<!-- Resolves views selected for rendering by @Controllers to .jsp resources 
+		in the /WEB-INF/views directory -->
+	<beans:bean
+		class="org.springframework.web.servlet.view.InternalResourceViewResolver">
+		<beans:property name="prefix" value="/WEB-INF/views/" />
+		<beans:property name="suffix" value=".jsp" />
+	</beans:bean>
+
+
+
+	<context:component-scan base-package="com.bitcamp.open" />
+
+	<!-- 데이터베이스 연결을 위한 dataSource 설정 -->
+	<beans:bean id="dataSource" class="com.mchange.v2.c3p0.ComboPooledDataSource">
+		<!-- 식별자 -->
+		<beans:property name="driverClass" value="com.mysql.jdbc.Driver" />
+
+		<beans:property name="jdbcUrl"
+
+			value="jdbc:mysql://localhost/openproject?characterEncoding=utf8" />
+
+		<beans:property name="user" value="bit" />
+
+		<beans:property name="password" value="bit" />
+	</beans:bean>
+
+	<!-- memberDao 빈 등록 -->
+
+	<beans:bean id="memberDao" class="com.bitcamp.open.member.dao.MemberDao">
+		<beans:constructor-arg ref="dataSource" />
+	</beans:bean>
+
+	<!-- memberservice 빈 등록 -->
+	<beans:bean id="memberservice"
+
+		class="com.bitcamp.open.member.service.MemberRegService">
+		<!-- <beans:property name="mybatisdao" ref="mybatisDao" /> -->
+	</beans:bean>
+
+	<!-- MemberLoginService 빈등록 -->
+	<!-- 애노테이션에 의에 dao 객체가 타입에 따라 자동 의존주입됨 -->
+	<beans:bean id="memberloginservice"
+		class="com.bitcamp.open.member.service.MemberLoginService">
+	</beans:bean>
+
+	<!-- multipartResolver 파일업로드 관련 빈 -->
+
+
+	<beans:bean id="multipartResolver"
+		class="org.springframework.web.multipart.commons.CommonsMultipartResolver">
+		<beans:property name="defaultEncoding">
+			<beans:value>utf-8</beans:value>
+		</beans:property>
+
+	</beans:bean>
+	<beans:bean id="memberlistService"
+		class="com.bitcamp.open.member.service.MemberListService" />
+
+	<!-- 로그인 체크를 위한 인터셉터 등록 -->
+	<mvc:interceptors>
+		<!-- 한개의 핸들러인터셉터를 생성 -->
+		<mvc:interceptor>
+			<!-- 핸들러인터셉터를 적용할 경로 설정 -->
+			<mvc:mapping path="/mypage/**" />
+			<!-- 경로중 일부 경로를 제외하고 싶을 때 -->
+			<!-- <mvc:exclude-mapping path="/mypage/help/**"/> -->
+			<beans:bean class="com.bitcamp.open.Interceptor.AuthCheckInterceptor" />
+		</mvc:interceptor>
+	</mvc:interceptors>
+
+	<!--MyBatis&Spring 연동 -->
+	<beans:bean id="sqlSessionFactory" class="org.mybatis.spring.SqlSessionFactoryBean">
+		<beans:property name="dataSource" ref="dataSource" />
+		<beans:property name="mapperLocations"
+			value="classpath:com/bitcamp/open/mybatis/mapper/*.xml" />
+		<!--calsspath:xml이 위치한 패키지 경로 -->
+
+	</beans:bean>
+	<!-- 트랜젝션 처리 시작 -->
+	<beans:bean id="transactionManager"
+		class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
+		<beans:property name="dataSource">
+			<beans:ref bean="dataSource" />
+		</beans:property>
+	</beans:bean>
+	<tx:annotation-driven transaction-manager="transactionManager" /> <!-- 트랜젝션 처리 끝 -->
+
+
+	<!-- sqlSessionTemplet 생성하는빈 Mybatais로 Dao -->
+	<beans:bean id="sqlSession" class="org.mybatis.spring.SqlSessionTemplate">
+		<beans:constructor-arg index="0" ref="sqlSessionFactory" />
+	</beans:bean>
+
+	<beans:bean id="mybatisDao"
+		class="com.bitcamp.open.member.dao.MemberMyBatisDao" />
+
+	<beans:bean id="pageRanks"
+		class="com.bitcamp.open.member.service.PageRanksView"></beans:bean>
+
+
+	<!--xls파일 다운로드를 위한 -->
+	<beans:bean id="viewResolver"
+		class="org.springframework.web.servlet.view.BeanNameViewResolver">
+		<beans:property name="order" value="1" />
+	</beans:bean>
+
+	<context:component-scan base-package="com.bitcamp.view" />
+	<beans:bean id="mailSender"
+		class="org.springframework.mail.javamail.JavaMailSenderImpl">
+
+		<beans:property name="host" value="smtp.gmail.com" />
+
+		<beans:property name="port" value="587" /><!-- 465 or 25 -->
+
+		<beans:property name="username" value="dlrjsgmlv39@gmail.com" />
+
+		<beans:property name="password" value="dlrjsgml12#" />
+
+		<beans:property name="defaultEncoding" value="utf-8" />
+
+		<beans:property name="javaMailProperties">
+
+			<beans:props>
+
+				<beans:prop key="mail.transport.protocol">smtp</beans:prop>
+
+				<beans:prop key="mail.smtp.auth">true</beans:prop>
+
+				<beans:prop key="mail.smtp.starttls.enable">true</beans:prop>
+
+				<beans:prop key="mail.debug">true</beans:prop>
+
+			</beans:props>
+		</beans:property>
+	</beans:bean>
+	<beans:bean id="mailservice"
+		class="com.bitcamp.open.member.service.SimpleRegistrationNotifier" />
+	<beans:bean id="mailservice2"
+		class="com.bitcamp.open.member.service.SimpleRegistrationNotifier2" />
+	<beans:bean id="updateService"
+		class="com.bitcamp.open.member.service.MemberUpdateService" />
+</beans:beans>
+
+
