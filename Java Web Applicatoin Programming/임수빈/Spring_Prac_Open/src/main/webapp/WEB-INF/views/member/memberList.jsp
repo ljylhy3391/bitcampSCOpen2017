@@ -24,7 +24,7 @@
 			<td>관리</td>
 		</tr>
 
-		<c:forEach var="memberView" items="${members}">
+		<c:forEach var="member" items="${members}">
 			<tr>
 				<td>${member.idx}</td>
 				<td>${member.memberId}</td>
@@ -33,7 +33,7 @@
 						<img src="../uploadfile/memberPhoto/${member.memberPhoto}"
 							width="100">
 					</c:if></td>
-				<td><a href="view?=memberId=${member.memerId}">보기</a></td>
+				<!--<td><a href="view?=memberId=${member.memerId}">보기</a></td>-->
 			</tr>
 		</c:forEach>
 
