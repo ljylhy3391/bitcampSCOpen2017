@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper 
+	PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+	"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<!-- Dao 에서 메퍼 설정에서 필요한 엘리먼트(설정) 호출할때 식별자 역할 -->
+<mapper namespace="com.bitcamp.mvc.mapper.MemberMapper">
+
+<!-- <select id="selectByEmail" resultType="com.bitcamp.mvc.model.Member">
+SELECT * FROM MEMBER WHERE ID = #{id}
+</select>
+
+<insert id="insertMember" parameterType="com.bitcamp.mvc.model.Member">
+INSERT INTO MEMBER (EMAIL, PASSWORD, NAME, REGDATE, PHOTO) 
+VALUES (#{email}, #{password}, #{name}, #{registerDate}, #{photo})
+</insert>-->
+
+</mapper>
